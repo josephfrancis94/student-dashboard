@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -25,6 +25,13 @@ export default function Layout() {
     navigate('/login', { replace: true });
   };
 
+  const today = new Date().toLocaleDateString(undefined, {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -43,7 +50,7 @@ export default function Layout() {
               to={item.to}
               className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
             >
-              {item.label}
+              <span>{item.label}</span>
             </NavLink>
           ))}
         </nav>
@@ -58,6 +65,16 @@ export default function Layout() {
       </aside>
 
       <main className="content-area">
+        <header className="topbar">
+          <div>
+            <p className="eyebrow">Overview</p>
+            <h2>Welcome back</h2>
+          </div>
+          <div className="topbar-meta">
+            <span className="date-pill">{today}</span>
+          </div>
+        </header>
+
         <Outlet />
       </main>
     </div>
