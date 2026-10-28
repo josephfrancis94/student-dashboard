@@ -34,6 +34,30 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const register = async ({ name, email, password, role = 'staff' }) => {
+    setLoading(true);
+
+    try {
+      const response = await api.post('/auth/register', { name, email, password, role });
+      const payload = extractPayload(response);
+
+      const sessionUser = {
+        id: payload.id,
+        name: payload.name,
+        email: payload.email,
+        role: payload.role,
+      };
+
+      localStorage.setItem('student-dashboard-token', payload.token);
+      localStorage.setItem('student-dashboard-user', JSON.stringify(sessionUser));
+      setUser(sessionUser);
+
+      return sessionUser;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('student-dashboard-token');
     localStorage.removeItem('student-dashboard-user');
@@ -45,6 +69,7 @@ export function AuthProvider({ children }) {
       user,
       loading,
       login,
+      register,
       logout,
     }),
     [user, loading]

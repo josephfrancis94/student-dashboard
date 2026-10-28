@@ -415,6 +415,18 @@ th {
   gap: 16px;
 }
 
+.auth-switcher {
+  margin-top: 18px;
+  text-align: center;
+  color: #475569;
+}
+
+.auth-switcher a {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+}
+
 .error-box,
 .success-box {
   border-radius: 10px;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
@@ -74,6 +74,10 @@ export default function LoginPage() {
             {loading ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
+
+        <div className="auth-switcher">
+          Don’t have an account? <Link to="/register">Create one</Link>
+        </div>
 
         <div className="demo-note">
           <strong>Notes:</strong> Use the credentials from your API user account. If you are not registered,
