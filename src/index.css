@@ -1,580 +1,74 @@
-:root {
-  --bg: #f4f7fb;
-  --bg-strong: #edf4ff;
-  --panel: rgba(255, 255, 255, 0.82);
-  --panel-solid: #ffffff;
-  --line: rgba(148, 163, 184, 0.22);
-  --line-strong: rgba(148, 163, 184, 0.35);
-  --text: #0f172a;
-  --text-soft: #475569;
-  --primary: #4f46e5;
-  --primary-2: #7c3aed;
-  --primary-3: #0ea5e9;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html, body, #root {
-  min-height: 100%;
-  height: 100%;
-  margin: 0;
-}
-
-body {
-  margin: 0;
-  background:
-    radial-gradient(circle at top left, rgba(79, 70, 229, 0.08), transparent 25%),
-    radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.08), transparent 20%),
-    var(--bg);
-  color: var(--text);
-  font-family: Inter, 'Segoe UI', sans-serif;
-  line-height: 1.5;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-a {
-  color: inherit;
-}
-
-.app-shell {
-  display: flex;
-  min-height: 100vh;
-  background: transparent;
-}
-
-.sidebar {
-  width: 276px;
-  background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
-  color: #fff;
-  padding: 28px 22px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 26px;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.brand-block {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 6px 6px 12px;
-}
-
-.brand-mark {
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #38bdf8, #8b5cf6);
-  font-weight: 800;
-  color: #fff;
-  box-shadow: 0 12px 25px rgba(124, 58, 237, 0.35);
-}
-
-.brand-mark.large {
-  width: 62px;
-  height: 62px;
-  font-size: 1.35rem;
-  margin: 0 auto 10px;
-}
-
-.eyebrow {
-  margin: 0;
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  opacity: 0.74;
-}
-
-.brand-block h2,
-.page-header h1,
-.auth-header h1,
-.panel h2,
-.topbar h2 {
-  margin: 0;
-}
-
-.sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  padding: 12px 12px;
-  border-radius: 12px;
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-.nav-link:hover {
-  background: rgba(148, 163, 184, 0.12);
-  color: #fff;
-}
-
-.nav-link.active {
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.28), rgba(14, 165, 233, 0.2));
-  color: #fff;
-  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
-}
-
-.user-card {
-  margin-top: auto;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 18px;
-  padding: 18px 16px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
-}
-
-.user-card h3 {
-  margin: 8px 0 14px;
-  font-size: 1.1rem;
-}
-
-.user-role {
-  margin: 0;
-  color: #93c5fd;
-  text-transform: capitalize;
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-}
-
-.logout-button,
-.primary-button,
-.secondary-button,
-.danger-button {
-  border: none;
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-weight: 700;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.logout-button,
-.secondary-button {
-  background: rgba(148, 163, 184, 0.12);
-  color: white;
-}
-
-.primary-button {
-  background: linear-gradient(135deg, var(--primary), var(--primary-2));
-  color: white;
-  box-shadow: 0 10px 20px rgba(79, 70, 229, 0.24);
-}
-
-.danger-button {
-  background: linear-gradient(135deg, #f87171, var(--danger));
-  color: white;
-}
-
-.primary-button:hover,
-.secondary-button:hover,
-.logout-button:hover,
-.danger-button:hover {
-  transform: translateY(-1px);
-}
-
-.content-area {
-  flex: 1;
-  padding: 28px 32px 32px;
-}
-
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 22px;
-  padding: 14px 20px;
-  background: rgba(255, 255, 255, 0.52);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  backdrop-filter: blur(8px);
-  box-shadow: var(--shadow);
-}
-
-.topbar-meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.date-pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(79, 70, 229, 0.08);
-  border: 1px solid rgba(79, 70, 229, 0.12);
-  color: var(--primary);
-  font-weight: 700;
-  font-size: 0.86rem;
-}
-
-.page-shell {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 4px 2px;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 18px;
-}
-
-.stat-card {
-  border-radius: 22px;
-  padding: 22px 20px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-height: 118px;
-  box-shadow: 0 18px 35px rgba(15, 23, 42, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.stat-card.blue { background: linear-gradient(135deg, #0ea5e9, #2563eb); }
-.stat-card.green { background: linear-gradient(135deg, #34d399, #10b981); }
-.stat-card.orange { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
-.stat-card.purple { background: linear-gradient(135deg, #a78bfa, #8b5cf6); }
-
-.stat-card span {
-  font-size: 0.88rem;
-  opacity: 0.9;
-  font-weight: 600;
-}
-
-.stat-card strong {
-  font-size: clamp(1.9rem, 2.6vw, 2.5rem);
-  line-height: 1.1;
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 18px;
-}
-
-.panel {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  box-shadow: var(--shadow);
-  padding: 22px;
-  backdrop-filter: blur(12px);
-}
-
-.mini-list {
-  list-style: none;
-  margin: 16px 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.mini-list li {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 10px;
-  color: var(--text-soft);
-}
-
-.empty-row,
-.empty-state {
-  color: #64748b;
-  font-style: italic;
-}
-
-.form-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.record-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.field-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-}
-
-label {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  color: var(--text-soft);
-  font-weight: 600;
-}
-
-input,
-select,
-textarea {
-  border: 1px solid var(--line-strong);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 10px 12px;
-  color: var(--text);
-  transition: all 0.2s ease;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-  border-color: rgba(79, 70, 229, 0.5);
-  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.08);
-}
-
-.full-width {
-  grid-column: 1 / -1;
-}
-
-.checkbox-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-direction: row !important;
-  color: var(--text);
-}
-
-.checkbox-row input {
-  width: 18px;
-  height: 18px;
-}
-
-.form-actions,
-.row-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.table-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 16px;
-}
-
-.table-toolbar input {
-  min-width: 220px;
-}
-
-.table-wrap {
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 12px 10px;
-  border-bottom: 1px solid #edf2f7;
-  text-align: left;
-  vertical-align: middle;
-}
-
-th {
-  color: #475569;
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-tr:hover td {
-  background: rgba(79, 70, 229, 0.02);
-}
-
-.status-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  padding: 5px 10px;
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  text-transform: capitalize;
-}
-
-.status-pill.active,
-.status-pill.present,
-.status-pill.passed,
-.status-pill.positive {
-  background: rgba(16, 185, 129, 0.12);
-  color: #047857;
-}
-
-.status-pill.inactive,
-.status-pill.absent,
-.status-pill.failed,
-.status-pill.negative {
-  background: rgba(239, 68, 68, 0.12);
-  color: #b91c1c;
-}
-
-.status-pill.late,
-.status-pill.warning,
-.status-pill.pending {
-  background: rgba(245, 158, 11, 0.12);
-  color: #b45309;
-}
-
-.auth-page {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-}
-
-.auth-card {
-  width: min(100%, 520px);
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
-  padding: 30px 28px;
-  backdrop-filter: blur(12px);
-}
-
-.auth-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.auth-header p {
-  margin: 10px 0 0;
-  color: var(--text-soft);
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.auth-switcher {
-  margin-top: 18px;
-  text-align: center;
-  color: var(--text-soft);
-}
-
-.auth-switcher a {
-  color: var(--primary);
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.error-box,
-.success-box {
-  border-radius: 12px;
-  padding: 10px 12px;
-  font-size: 0.92rem;
-}
-
-.error-box {
-  background: rgba(239, 68, 68, 0.08);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  color: #b91c1c;
-}
-
-.success-box {
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  color: #047857;
-}
-
-.demo-note {
-  margin-top: 18px;
-  padding-top: 14px;
-  border-top: 1px solid #e2e8f0;
-  color: var(--text-soft);
-  font-size: 0.9rem;
-}
-
-.loading-box {
-  padding: 18px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid var(--line);
-  color: var(--text-soft);
-  box-shadow: var(--shadow);
-}
-
-@media (max-width: 900px) {
-  .app-shell {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .content-area {
-    padding: 20px;
-  }
-}
-
-@media (max-width: 560px) {
-  .topbar,
-  .table-toolbar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .table-toolbar input {
-    min-width: unset;
-  }
-
-  .content-area {
-    padding: 18px 16px 20px;
-  }
+export default function StudentDetailModal({ student, onClose }) {
+  if (!student) return null;
+
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="detail-modal" onClick={(event) => event.stopPropagation()}>
+        <div className="modal-header">
+          <div>
+            <p className="eyebrow">Student profile</p>
+            <h2>{student.firstName} {student.lastName}</h2>
+          </div>
+          <button type="button" className="close-button" onClick={onClose}>
+            ×
+          </button>
+        </div>
+
+        <div className="modal-grid">
+          <div className="modal-card dark-card">
+            <div className="profile-avatar">{student.firstName?.charAt(0) || 'S'}</div>
+            <div>
+              <p className="label">Student ID</p>
+              <strong>{student.studentId}</strong>
+            </div>
+          </div>
+
+          <div className="modal-card">
+            <p className="label">Department</p>
+            <strong>{student.department || 'N/A'}</strong>
+          </div>
+
+          <div className="modal-card">
+            <p className="label">Class</p>
+            <strong>{student.className || 'N/A'}</strong>
+          </div>
+
+          <div className="modal-card">
+            <p className="label">Status</p>
+            <strong className={`status-pill ${String(student.status || 'Active').toLowerCase()}`}>
+              {student.status || 'Active'}
+            </strong>
+          </div>
+        </div>
+
+        <div className="modal-info-grid">
+          <div>
+            <p className="label">Email</p>
+            <span>{student.email || 'N/A'}</span>
+          </div>
+          <div>
+            <p className="label">Phone</p>
+            <span>{student.phone || 'N/A'}</span>
+          </div>
+          <div>
+            <p className="label">Guardian</p>
+            <span>{student.guardianName || 'N/A'}</span>
+          </div>
+          <div>
+            <p className="label">Guardian phone</p>
+            <span>{student.guardianPhone || 'N/A'}</span>
+          </div>
+          <div>
+            <p className="label">Gender</p>
+            <span>{student.gender || 'N/A'}</span>
+          </div>
+          <div>
+            <p className="label">Address</p>
+            <span>{student.address || 'N/A'}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
