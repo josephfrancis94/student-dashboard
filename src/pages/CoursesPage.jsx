@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import api, { extractPayload } from '../api/client';
+import { useAudit } from '../context/AuditContext';
 
 const emptyForm = {
   courseCode: '',
@@ -17,6 +18,7 @@ export default function CoursesPage() {
   const [editingId, setEditingId] = useState(null);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const { recordAuditEntry } = useAudit();
 
   const loadCourses = async () => {
     try {
@@ -38,16 +40,22 @@ export default function CoursesPage() {
     setError('');
 
     try {
-      const payload = {
-        ...form,
-        credits: Number(form.credits),
-      };
+      const payload = { ...form, credits: Number(form.credits) };
 
       if (editingId) {
         await api.put(`/courses/${editingId}`, payload);
+        recordAuditEntry('updated', 'course', editingId, {
+          name: form.courseName,
+          department: form.department,
+        });
         setMessage('Course updated successfully.');
       } else {
-        await api.post('/courses', payload);
+        const response = await api.post('/courses', payload);
+        const created = extractPayload(response);
+        recordAuditEntry('created', 'course', created?._id || null, {
+          name: form.courseName,
+          department: form.department,
+        });
         setMessage('Course created successfully.');
       }
 
@@ -76,7 +84,12 @@ export default function CoursesPage() {
     if (!window.confirm('Delete this course?')) return;
 
     try {
+      const course = courses.find((entry) => entry._id === id);
       await api.delete(`/courses/${id}`);
+      recordAuditEntry('deleted', 'course', id, {
+        name: course?.courseName || 'Course',
+        department: course?.department || 'N/A',
+      });
       setMessage('Course deleted.');
       await loadCourses();
     } catch (err) {
@@ -89,7 +102,7 @@ export default function CoursesPage() {
       <header className="page-header">
         <div>
           <p className="eyebrow">Academics</p>
-          <h1>Courses</h1>
+          <h1>Course catalog</h1>
         </div>
       </header>
 

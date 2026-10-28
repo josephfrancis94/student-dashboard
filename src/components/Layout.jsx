@@ -1,10 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [theme, setTheme] = useState(() => localStorage.getItem('student-dashboard-theme') || 'light');
+
+  useEffect(() => {
+    document.body.dataset.theme = theme;
+    localStorage.setItem('student-dashboard-theme', theme);
+  }, [theme]);
 
   const navItems = [
     { label: 'Dashboard', to: '/dashboard' },
@@ -39,7 +45,7 @@ export default function Layout() {
           <div className="brand-mark">SD</div>
           <div>
             <p className="eyebrow">Management</p>
-            <h2>Student Dashboard</h2>
+            <h2>Stellar Academy</h2>
           </div>
         </div>
 
@@ -57,7 +63,7 @@ export default function Layout() {
 
         <div className="user-card">
           <p className="user-role">{user?.role || 'User'}</p>
-          <h3>{user?.name || 'Student Admin'}</h3>
+          <h3>{user?.name || 'School Admin'}</h3>
           <button type="button" className="logout-button" onClick={handleLogout}>
             Logout
           </button>
@@ -67,10 +73,17 @@ export default function Layout() {
       <main className="content-area">
         <header className="topbar">
           <div>
-            <p className="eyebrow">Overview</p>
+            <p className="eyebrow">Operations</p>
             <h2>Welcome back</h2>
           </div>
           <div className="topbar-meta">
+            <button
+              type="button"
+              className="theme-toggle"
+              onClick={() => setTheme((current) => (current === 'light' ? 'dark' : 'light'))}
+            >
+              {theme === 'light' ? 'Dark mode' : 'Light mode'}
+            </button>
             <span className="date-pill">{today}</span>
           </div>
         </header>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api, { extractPayload } from '../api/client';
+import { useAudit } from '../context/AuditContext';
 
 const emptyForm = {
   student: '',
@@ -17,6 +18,7 @@ export default function AttendancePage() {
   const [editingId, setEditingId] = useState(null);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const { recordAuditEntry } = useAudit();
 
   const loadData = async () => {
     try {
@@ -48,16 +50,22 @@ export default function AttendancePage() {
     setError('');
 
     try {
-      const payload = {
-        ...form,
-        date: form.date,
-      };
+      const payload = { ...form, date: form.date };
 
       if (editingId) {
         await api.put(`/attendance/${editingId}`, payload);
+        recordAuditEntry('updated', 'attendance', editingId, {
+          status: form.status,
+          course: form.course,
+        });
         setMessage('Attendance updated.');
       } else {
-        await api.post('/attendance', payload);
+        const response = await api.post('/attendance', payload);
+        const created = extractPayload(response);
+        recordAuditEntry('created', 'attendance', created?._id || null, {
+          status: form.status,
+          course: form.course,
+        });
         setMessage('Attendance marked.');
       }
 
@@ -85,6 +93,7 @@ export default function AttendancePage() {
 
     try {
       await api.delete(`/attendance/${id}`);
+      recordAuditEntry('deleted', 'attendance', id, { reason: 'attendance record removed' });
       setMessage('Attendance record deleted.');
       await loadData();
     } catch (err) {
