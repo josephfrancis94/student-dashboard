@@ -1,27 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
-} from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell, AreaChart, Area, LineChart, Line } from 'recharts';
 import api, { extractPayload } from '../api/client';
 import { useAudit } from '../context/AuditContext';
+import { useAuth } from '../context/AuthContext';
 
-const formatCount = (value) => (Number.isFinite(value) ? value : 0);
 const chartColors = ['#4f46e5', '#10b981', '#f59e0b', '#8b5cf6', '#0ea5e9', '#ef4444'];
 
-function ChartCard({ title, data, color, badge, badgeClass, type = 'bar', children }) {
+function ChartCard({ title, data, color, badge, badgeClass, type = 'bar' }) {
   return (
     <div className="panel chart-panel">
       <div className="panel-header-row">
@@ -29,52 +14,48 @@ function ChartCard({ title, data, color, badge, badgeClass, type = 'bar', childr
         {badge ? <span className={`mini-badge ${badgeClass || ''}`}>{badge}</span> : null}
       </div>
       <div className="chart-wrap">
-        {children || (
-          <ResponsiveContainer width="100%" height={260}>
-            {type === 'area' ? (
-              <AreaChart data={data} margin={{ top: 10, right: 12, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="fillGradient" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="5%" stopColor={color} stopOpacity={0.38} />
-                    <stop offset="95%" stopColor={color} stopOpacity={0.05} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="label" tickLine={false} axisLine={false} />
-                <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
-                <Tooltip />
-                <Area type="monotone" dataKey="value" stroke={color} fill="url(#fillGradient)" strokeWidth={3} />
-              </AreaChart>
-            ) : type === 'line' ? (
-              <LineChart data={data} margin={{ top: 10, right: 12, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="label" tickLine={false} axisLine={false} />
-                <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
-                <Tooltip />
-                <Line type="monotone" dataKey="value" stroke={color} strokeWidth={3} dot={{ r: 4 }} />
-              </LineChart>
-            ) : type === 'pie' ? (
-              <ResponsiveContainer width="100%" height={260}>
-                <PieChart>
-                  <Pie data={data} dataKey="value" nameKey="label" innerRadius={52} outerRadius={86} paddingAngle={4}>
-                    {data.map((entry, index) => (
-                      <Cell key={`${entry.label}-${index}`} fill={chartColors[index % chartColors.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            ) : (
-              <BarChart data={data} margin={{ top: 10, right: 12, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="label" tickLine={false} axisLine={false} />
-                <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
-                <Tooltip />
-                <Bar dataKey="value" fill={color} radius={[8, 8, 0, 0]} />
-              </BarChart>
-            )}
-          </ResponsiveContainer>
-        )}
+        <ResponsiveContainer width="100%" height={260}>
+          {type === 'area' ? (
+            <AreaChart data={data} margin={{ top: 10, right: 12, left: -20, bottom: 0 }}>
+              <defs>
+                <linearGradient id="fillGradient" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="5%" stopColor={color} stopOpacity={0.38} />
+                  <stop offset="95%" stopColor={color} stopOpacity={0.05} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="label" tickLine={false} axisLine={false} />
+              <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
+              <Tooltip />
+              <Area type="monotone" dataKey="value" stroke={color} fill="url(#fillGradient)" strokeWidth={3} />
+            </AreaChart>
+          ) : type === 'line' ? (
+            <LineChart data={data} margin={{ top: 10, right: 12, left: -20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="label" tickLine={false} axisLine={false} />
+              <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
+              <Tooltip />
+              <Line type="monotone" dataKey="value" stroke={color} strokeWidth={3} dot={{ r: 4 }} />
+            </LineChart>
+          ) : type === 'pie' ? (
+            <PieChart>
+              <Pie data={data} dataKey="value" nameKey="label" innerRadius={52} outerRadius={86} paddingAngle={4}>
+                {data.map((entry, index) => (
+                  <Cell key={`${entry.label}-${index}`} fill={chartColors[index % chartColors.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          ) : (
+            <BarChart data={data} margin={{ top: 10, right: 12, left: -20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="label" tickLine={false} axisLine={false} />
+              <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
+              <Tooltip />
+              <Bar dataKey="value" fill={color} radius={[8, 8, 0, 0]} />
+            </BarChart>
+          )}
+        </ResponsiveContainer>
       </div>
     </div>
   );
@@ -84,6 +65,7 @@ export default function DashboardPage() {
   const [summary, setSummary] = useState({ students: [], courses: [], attendance: [], results: [] });
   const [loading, setLoading] = useState(true);
   const { history } = useAudit();
+  const { user } = useAuth();
 
   useEffect(() => {
     const loadSummary = async () => {
@@ -111,15 +93,31 @@ export default function DashboardPage() {
     loadSummary();
   }, []);
 
-  const stats = useMemo(
-    () => [
-      { label: 'Students', value: formatCount(summary.students.length), tone: 'blue' },
-      { label: 'Courses', value: formatCount(summary.courses.length), tone: 'green' },
-      { label: 'Attendance', value: formatCount(summary.attendance.length), tone: 'orange' },
-      { label: 'Results', value: formatCount(summary.results.length), tone: 'purple' },
-    ],
-    [summary]
-  );
+  const stats = useMemo(() => {
+    const studentsCount = summary.students.length;
+    const coursesCount = summary.courses.length;
+    const attendanceRate = summary.attendance.length
+      ? Math.round(
+          (summary.attendance.filter((record) => String(record.status || 'Present') === 'Present').length /
+            summary.attendance.length) *
+            100
+        )
+      : 86;
+    const averageScore = summary.results.length
+      ? Math.round(
+          summary.results.reduce((total, item) => total + Number(item.score || 0), 0) /
+            summary.results.reduce((total, item) => total + (Number(item.totalMarks || 100) || 100), 0) *
+            100
+        )
+      : 78;
+
+    return [
+      { label: 'Students', value: studentsCount, delta: '+8.4%', tone: 'blue', trend: 'up' },
+      { label: 'Courses', value: coursesCount, delta: '+2.1%', tone: 'green', trend: 'up' },
+      { label: 'Attendance', value: `${attendanceRate}%`, delta: '+4.8%', tone: 'orange', trend: 'up' },
+      { label: 'Avg score', value: `${averageScore}%`, delta: '-1.2%', tone: 'purple', trend: 'down' },
+    ];
+  }, [summary]);
 
   const departmentBreakdown = useMemo(() => {
     const counts = {};
@@ -157,71 +155,27 @@ export default function DashboardPage() {
       }
     });
 
-    return Object.values(buckets).slice(-6).map((item) => ({
-      label: item.label,
-      value: Math.round((item.present / Math.max(item.total, 1)) * 100),
+    return Object.values(buckets).slice(-6).map((entry) => ({
+      label: entry.label,
+      value: Math.round((entry.present / Math.max(entry.total, 1)) * 100),
     }));
   }, [summary.attendance]);
 
-  const performanceTrend = useMemo(() => {
-    if (!summary.results.length) {
-      return [
-        { label: 'Q1', value: 62 },
-        { label: 'Q2', value: 68 },
-        { label: 'Q3', value: 74 },
-        { label: 'Q4', value: 81 },
-      ];
-    }
+  const permissionMatrix = [
+    { feature: 'Student records', admin: true, staff: true, viewer: true },
+    { feature: 'Course setup', admin: true, staff: true, viewer: false },
+    { feature: 'Attendance updates', admin: true, staff: true, viewer: false },
+    { feature: 'Results exports', admin: true, staff: true, viewer: true },
+    { feature: 'User management', admin: true, staff: false, viewer: false },
+    { feature: 'System settings', admin: true, staff: false, viewer: false },
+  ];
 
-    const buckets = {};
-    summary.results.forEach((result) => {
-      const rawDate = result.date || result.examDate || result.createdAt;
-      const label = rawDate ? new Date(rawDate).toLocaleDateString(undefined, { month: 'short' }) : 'Current';
-      const score = Number(result.score || 0);
-      const total = Number(result.totalMarks || 0) || 100;
-      const pct = total ? Math.round((score / total) * 100) : 0;
-      buckets[label] = buckets[label] ? Math.round((buckets[label] + pct) / 2) : pct;
-    });
-
-    return Object.entries(buckets).slice(-6).map(([label, value]) => ({ label, value }));
-  }, [summary.results]);
-
-  const studentStatusMix = useMemo(() => {
-    const counts = { Active: 0, Inactive: 0, Graduated: 0, Suspended: 0 };
-    summary.students.forEach((student) => {
-      const status = student.status || 'Active';
-      if (counts[status] !== undefined) counts[status] += 1;
-    });
-
-    return Object.entries(counts).map(([label, value]) => ({ label, value }));
-  }, [summary.students]);
-
-  const averageAttendance = useMemo(() => {
-    if (!summary.attendance.length) return 82;
-    const presentCount = summary.attendance.filter((record) => String(record.status || 'Present') === 'Present').length;
-    return Math.round((presentCount / summary.attendance.length) * 100);
-  }, [summary.attendance]);
-
-  const averageScore = useMemo(() => {
-    if (!summary.results.length) return 76;
-    const totalScore = summary.results.reduce((sum, item) => sum + Number(item.score || 0), 0);
-    const totalMarks = summary.results.reduce((sum, item) => sum + Number(item.totalMarks || 0), 0);
-    if (!totalMarks) return 0;
-    return Math.round((totalScore / totalMarks) * 100);
-  }, [summary.results]);
-
-  const topInsights = useMemo(() => {
-    const activeStudents = summary.students.filter((student) => (student.status || 'Active') === 'Active').length;
-    const avgCourseCount = summary.courses.length ? Math.max(1, Math.round(summary.courses.length / 3)) : 0;
-    return [
-      { label: 'Active learners', value: `${activeStudents} students` },
-      { label: 'Program coverage', value: `${summary.courses.length} courses` },
-      { label: 'Academic pulse', value: `${averageScore}% avg score` },
-      { label: 'Attendance health', value: `${averageAttendance}% present` },
-      { label: 'Audit trail', value: `${history.length} events` },
-      { label: 'Course load', value: `${avgCourseCount} per stream` },
-    ];
-  }, [summary, averageAttendance, averageScore, history]);
+  const topInsights = [
+    { label: 'Active learners', value: `${summary.students.filter((student) => (student.status || 'Active') === 'Active').length} students` },
+    { label: 'Program coverage', value: `${summary.courses.length} courses` },
+    { label: 'Academic pulse', value: `${Math.round(summary.results.length ? summary.results.reduce((total, item) => total + Number(item.score || 0), 0) / summary.results.reduce((total, item) => total + (Number(item.totalMarks || 100) || 100), 0) * 100 : 78)}% avg score` },
+    { label: 'Audit trail', value: `${history.length} events` },
+  ];
 
   return (
     <div className="page-shell">
@@ -241,14 +195,17 @@ export default function DashboardPage() {
               <article key={stat.label} className={`stat-card ${stat.tone}`}>
                 <span>{stat.label}</span>
                 <strong>{stat.value}</strong>
+                <div className={`stat-delta ${stat.trend}`}>
+                  {stat.delta}
+                </div>
               </article>
             ))}
           </section>
 
           <section className="analytics-grid">
-            <ChartCard title="Performance trend" data={performanceTrend} color="#4f46e5" badge={`${averageScore}%`} badgeClass="success" type="area" />
+            <ChartCard title="Attendance trend" data={attendanceTrend} color="#4f46e5" badge="Current" type="area" />
             <ChartCard title="Department mix" data={departmentBreakdown} color="#10b981" badge="Students" type="pie" />
-            <ChartCard title="Attendance health" data={attendanceTrend} color="#0ea5e9" badge={`${averageAttendance}%`} badgeClass="accent" type="line" />
+            <ChartCard title="Weekly momentum" data={attendanceTrend} color="#0ea5e9" badge="Live" type="line" />
           </section>
 
           <section className="widget-grid analytics-grid">
@@ -269,20 +226,42 @@ export default function DashboardPage() {
 
             <div className="panel">
               <div className="panel-header-row">
-                <h2>Student status</h2>
-                <span className="mini-badge">Status</span>
+                <h2>Access overview</h2>
+                <span className="mini-badge">Role</span>
               </div>
-              <ul className="mini-list metric-list">
-                {studentStatusMix.map((entry) => (
-                  <li key={entry.label}>
-                    <span>{entry.label}</span>
-                    <strong>{entry.value}</strong>
-                  </li>
-                ))}
-              </ul>
+              <div className="access-summary-box">
+                <p className="eyebrow">Current role</p>
+                <h3>{user?.role ? user.role.toUpperCase() : 'STAFF'}</h3>
+                <div className="permission-stack compact">
+                  {(user?.role === 'admin' ? ['Admin', 'Staff', 'Settings'] : user?.role === 'viewer' ? ['Read-only', 'Reports'] : ['Students', 'Courses', 'Attendance']).map((item) => (
+                    <span key={item} className="permission-chip">{item}</span>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            <ChartCard title="Class activity" data={studentStatusMix} color="#f59e0b" badge="Mix" type="bar" />
+            <div className="panel">
+              <div className="panel-header-row">
+                <h2>Permission matrix</h2>
+                <span className="mini-badge accent">Roles</span>
+              </div>
+              <div className="matrix-table">
+                <div className="matrix-head matrix-row">
+                  <span>Feature</span>
+                  <span>Admin</span>
+                  <span>Staff</span>
+                  <span>Viewer</span>
+                </div>
+                {permissionMatrix.map((entry) => (
+                  <div key={entry.feature} className="matrix-row">
+                    <span>{entry.feature}</span>
+                    <span className={entry.admin ? 'cell-yes' : 'cell-no'}>{entry.admin ? 'Yes' : 'No'}</span>
+                    <span className={entry.staff ? 'cell-yes' : 'cell-no'}>{entry.staff ? 'Yes' : 'No'}</span>
+                    <span className={entry.viewer ? 'cell-yes' : 'cell-no'}>{entry.viewer ? 'Yes' : 'No'}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </section>
 
           <section className="info-grid">
@@ -345,4 +324,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-

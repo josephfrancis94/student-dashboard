@@ -2,6 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+const rolePermissions = {
+  admin: ['Users', 'Students', 'Courses', 'Attendance', 'Results', 'Settings'],
+  staff: ['Students', 'Courses', 'Attendance', 'Results'],
+  viewer: ['Students', 'Results'],
+};
+
 export default function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -17,6 +23,7 @@ export default function Layout() {
     { label: 'Students', to: '/students' },
     { label: 'Courses', to: '/courses' },
     { label: 'Attendance', to: '/attendance' },
+    { label: 'Attendance Analytics', to: '/attendance-analytics' },
     { label: 'Results', to: '/results' },
   ];
 
@@ -37,9 +44,15 @@ export default function Layout() {
       accent: 'staff',
       description: 'Academic operations',
     },
+    viewer: {
+      label: 'Viewer',
+      accent: 'viewer',
+      description: 'Read-only access',
+    },
   };
 
   const currentRole = roleMeta[user?.role] || roleMeta.staff;
+  const permissions = rolePermissions[user?.role] || rolePermissions.staff;
 
   const handleLogout = () => {
     logout();
@@ -82,6 +95,15 @@ export default function Layout() {
           </div>
           <p className="user-role">{currentRole.description}</p>
           <h3>{user?.name || 'School Admin'}</h3>
+
+          <div className="permission-stack">
+            {permissions.map((permission) => (
+              <span key={permission} className="permission-chip">
+                {permission}
+              </span>
+            ))}
+          </div>
+
           <button type="button" className="logout-button" onClick={handleLogout}>
             Logout
           </button>
