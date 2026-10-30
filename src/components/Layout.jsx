@@ -26,6 +26,21 @@ export default function Layout() {
     }
   }, [user, navigate]);
 
+  const roleMeta = {
+    admin: {
+      label: 'Administrator',
+      accent: 'admin',
+      description: 'Full access and oversight',
+    },
+    staff: {
+      label: 'Staff',
+      accent: 'staff',
+      description: 'Academic operations',
+    },
+  };
+
+  const currentRole = roleMeta[user?.role] || roleMeta.staff;
+
   const handleLogout = () => {
     logout();
     navigate('/login', { replace: true });
@@ -62,7 +77,10 @@ export default function Layout() {
         </nav>
 
         <div className="user-card">
-          <p className="user-role">{user?.role || 'User'}</p>
+          <div className={`user-role-badge ${currentRole.accent}`}>
+            {currentRole.label}
+          </div>
+          <p className="user-role">{currentRole.description}</p>
           <h3>{user?.name || 'School Admin'}</h3>
           <button type="button" className="logout-button" onClick={handleLogout}>
             Logout
@@ -77,6 +95,7 @@ export default function Layout() {
             <h2>Welcome back</h2>
           </div>
           <div className="topbar-meta">
+            <div className={`role-chip ${currentRole.accent}`}>{currentRole.label}</div>
             <button
               type="button"
               className="theme-toggle"
